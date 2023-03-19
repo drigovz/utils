@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>CPF Validator</title>
+</head>
+
+<body>
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <style type="text/css">
+        label {
+            display: block;
+            font-family: 'IBM Plex Mono';
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            border: 2px solid #000;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        input::placeholder {
+            color: rgba(0, 0, 0, .2);
+
+        }
+
+        input.erro {
+            border-color: #fa0000;
+        }
+
+        input.valido {
+            border-color: #00b300;
+        }
+
+        .span-error {
+            display: none;
+            font-family: 'IBM Plex Mono';
+            font-size: .895rem;
+            font-weight: bold;
+            color: #fa0000;
+        }
+
+        .span-error.ativar {
+            display: block;
+        }
+    </style>
+    <main>
+        <form action="">
+            <label for="cpf">CPF</label>
+            <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" />
+
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" />
+        </form>
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

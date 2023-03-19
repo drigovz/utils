@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/drigolx/Dev/db:/var/lib/postgresql/data
+    networks:
+      - dev-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
+# access http://localhost:16543/ to PgAdmin

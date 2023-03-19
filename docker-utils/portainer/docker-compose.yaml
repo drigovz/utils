@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  portainer:
+    image: portainer/portainer:alpine
+    container_name: portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/${USER_ROOT}/Dev/portainer:/data portainer/portainer
+    ports:
+      - "9000:9000"
+    restart: always
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
+# docker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v C:\portainer:/data portainer/portainer

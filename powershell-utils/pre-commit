@@ -1,0 +1,28 @@
+#!/bin/sh
+RED='\033[0;31m'
+GREEN='\033[1;32m'
+NO_COLOR='\033[0m'
+
+# $? is a variable which stores the return code from what we just ran
+dotnet build
+result_build=$? 
+
+dotnet test 
+result_test=$? 
+
+if [[ $result_build != 0 ]] ; then
+	echo -e "${RED} Application fail on build! ${NO_COLOR}"
+	echo ""
+	exit $result_build
+fi
+
+if [[ $result_test != 0 ]] ; then
+	echo -e "${RED} Application fail on tests! ${NO_COLOR}"
+	echo ""
+	exit $result_test
+fi
+
+echo -e "${GREEN}Pre commit check passed!${NC}"
+echo ""
+
+exit 0
