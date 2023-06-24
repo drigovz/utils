@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  rabbitmq:
+    # image: rabbitmq:3.11.16-management-alpine
+    build:
+      context: .
+      dockerfile: ./.docker/rabbitmq.dockerfile
+    container_name: rabbitmq
+    user: root
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "25676:25676"
+    networks:
+      - dev-network
+    volumes:
+      - C:\containers\rabbitmq\data:/var/lib/rabbitmq/
+      - C:\containers\rabbitmq\log:/var/log/rabbitmq
+      - C:\containers\rabbitmq\mnesia:/var/lib/rabbitmq/mnesia
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+networks:
+  dev-network:
+    driver: bridge
