@@ -1,13 +1,19 @@
 version: "3.7"
+
 services:
   redis:
-    image: redis:alpine
+    image: redis:latest
     container_name: redis
     command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     networks:
       - dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
   redisinsight:
     image: redislabs/redisinsight:latest
@@ -15,15 +21,13 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - /home/drigolx/Dev/redisdb:/db
-      #- C:\redis-ex:/db
+      - C:\containers\redis\redisinsight:/db
     depends_on:
-      - redis
+      redis:
+        condition: service_started
     networks:
       - dev-network
 
 networks:
   dev-network:
     driver: bridge
-# access http://localhost:8001/ to RedisInsight
-# on connection, try localhost on host value, if dont pass, try IP address of your machine
