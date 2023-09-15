@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  sonarqube:
+    image: sonarqube:9.9-community
+    container_name: sonarqube
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
+      SONARQUBE_DATABASE_USER: admin
+      SONARQUBE_DATABASE_NAME: Admin
+    ports:
+      - 9000:9000
+    volumes:
+      - C:\containers\sonarqube:/opt/sonarqube/data
+      - C:\containers\sonarqube:/opt/sonarqube/extensions
+      - C:\containers\sonarqube:/opt/sonarqube/logs
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
+
+# http://localhost:9000/
