@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  namespace: default
+  name: pgadmin-deployment
+
+spec:
+  selector:
+    matchLabels:
+      app: pgadmin
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+        - name: pgadmin
+          image: dpage/pgadmin4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 16543
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: PGADMIN_DEFAULT_EMAIL
+                  name: pgadmin-secret
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PGADMIN_DEFAULT_PASSWORD
+                  name: pgadmin-secret

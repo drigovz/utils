@@ -170,3 +170,75 @@ ps -ef | grep port-forward
 
 kill -9 [PID]
 ```
+### PG Admin
+Podemos adicionar também um Pod para o PGAdmin em nosso cluster, e com isso, gerenciarmos os bancos de dados do Postgre diretamente por ele. Para isso, devemos primeiramente criar um secret com as informações de login para o PGAdmin.
+
+_pgadmin-secret.yaml_
+
+```.yaml
+apiVersion: v1
+kind: Secret
+
+metadata:
+  name: pgadmin-secret
+  namespace: default
+  labels:
+    app: pgadmin
+
+data:
+  PGADMIN_DEFAULT_PASSWORD: YWRtaW4xMjM=
+stringData: 
+  PGADMIN_DEFAULT_EMAIL: email@teste.com
+```
+Em seguida, criamos o arquivo de deployment que irá criar os Pods do PGAdmin.
+
+_pgadmin-deployment.yaml_
+
+```.yaml
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  namespace: default
+  name: pgadmin-deployment
+
+spec:
+  selector:
+    matchLabels:
+      app: pgadmin
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+        - name: pgadmin
+          image: dpage/pgadmin4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 16543
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: PGADMIN_DEFAULT_EMAIL
+                  name: pgadmin-secret
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PGADMIN_DEFAULT_PASSWORD
+                  name: pgadmin-secret
+```
+Com isso, basta rodarmos o comando:
+
+```
+kubectl port-forward service/pgadmin-svc 16543:80 &
+```
+
+Por fim basta acessarmos o PGAdmin via browser: http://localhost:16543/login. 
+Para conectar o PGAdmin dentro do Minikube em um banco de dados PostgreSQL que está dentro do Minikube, usamos o nome do serviço que está associado aos Pods do Postgres nesse caso é o postgres-svc.
