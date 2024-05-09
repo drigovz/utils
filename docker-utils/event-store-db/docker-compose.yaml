@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  eventstoredb:
+    image: eventstore/eventstore:latest
+    container_name: eventstoredb
+    user: root
+    ports:
+      - 1113:1113
+      - 2113:2113
+    networks:
+      - dev-network
+    volumes:
+      - C:\containers\eventstoredb\lib:/var/lib/eventstore
+      - C:\containers\eventstoredb\log:/var/log/eventstore
+    environment:
+      EVENTSTORE_CLUSTER_SIZE: 1
+      EVENTSTORE_RUN_PROJECTIONS: All
+      EVENTSTORE_START_STANDARD_PROJECTIONS: True
+      EVENTSTORE_INSECURE: true
+      EVENTSTORE_HTTP_PORT: 2113
+      EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: true
+
+networks:
+  dev-network:
+    driver: bridge
+
+# Admin UI: http://localhost:2113/
