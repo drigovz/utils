@@ -22,3 +22,6 @@ services:
 networks:
   dev-network:
     driver: bridge
+
+# connection string
+# AccountName=your-account-name-here;" + "AccountKey=your-account-key-here;" + "DefaultEndpointsProtocol=http;" + "QueueEndpoint=http://127.0.0.1:10001/your-account-name-here"
